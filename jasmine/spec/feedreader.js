@@ -104,14 +104,14 @@ $(function() {
          let newContent;
          beforeEach(function(done) {
             loadFeed(0, function(){
-                let oldContent = $('.feed').html();
+                oldContent = $('.feed').html();
             });
             loadFeed(1, function(){
-            let newContent = $('.feed').html();
-            done();
+                newContent = $('.feed').html();
             });
-        });
-        it('Content changes when a new feed is loaded by the loadFeed() function', function(done){
+            done();
+         });
+         it('Content changes when a new feed is loaded by the loadFeed() function', function(done){
             expect(oldContent).not.toMatch(newContent);
             done();
         });
