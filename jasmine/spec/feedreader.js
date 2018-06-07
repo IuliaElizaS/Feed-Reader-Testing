@@ -34,7 +34,7 @@ $(function() {
         it('URLs are defined', function(){
             for( const feed of allFeeds) {
                 expect(feed.url).toBeDefined();
-                expect(feed.url).not.toBe(0);
+                expect(feed.url).not.toBe('');
             }
          });
 
@@ -46,7 +46,7 @@ $(function() {
          it('names are defined', function(){
             for( const feed of allFeeds){
                 expect(feed.name).toBeDefined();
-                expect(feed.name).not.toBe(0);
+                expect(feed.name).not.toBe('');
             }
          });
     });
@@ -66,10 +66,19 @@ $(function() {
           * and does it hide when clicked again.
           */
         it('Menu changes visibility on icon click', function(){
-            expect($('.menu-icon-link').on('click').hasClass('menu-hidden')).toBeFalsy();
-            expect($('.menu-icon-link').on('click').toggleClass('menu-hidden')).toBeTruthy();
+            const menuIcon = $('.menu-icon-link');
+            const body = $('body');
+            // trigger click event on menu icon.
+            menuIcon.click();
+            //the menu should be visible (the body shouldn't have menu-hidden class)
+            expect(body.hasClass('menu-hidden')).toBe(false);
+            // trigger second click event on menu icon.
+            menuIcon.click();
+            //the menu should be hidden (the body should have menu-hidden class)
+            expect(body.hasClass('menu-hidden')).toBe(true);
         });
-      });
+    });
+
     /* test suite named "Initial Entries" */
     describe('Initial Entries', function(){
 
@@ -79,12 +88,11 @@ $(function() {
          * the use of Jasmine's beforeEach and asynchronous done() function.
          */
          beforeEach(function(done) {
-            loadFeed(0);
-            done();
-        });
+            loadFeed(0, done); //done() is used as a callback of the loadFeed() function
+          });
 
         it('there is at least one .entry element in the .feed container', function(done){
-            const feedEntries =$('.feed').children('.entry');
+            const feedEntries =$('.feed').find('.entry');
             expect(feedEntries.length).toBeGreaterThan(0);
             done();
         });
@@ -104,13 +112,13 @@ $(function() {
                 oldContent = $('.feed').html();
                 loadFeed(1, function(){
                     newContent = $('.feed').html();
+                    done();
                 });
-                done();
             });
           });
 
         it('Content changes when a new feed is loaded by the loadFeed() function', function(done){
-            expect(oldContent).not.toEqual(newContent);
+            expect(oldContent).not.toMatch(newContent);
             done();
         });
     });
