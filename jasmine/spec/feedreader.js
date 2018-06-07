@@ -110,7 +110,7 @@ $(function() {
           });
 
         it('Content changes when a new feed is loaded by the loadFeed() function', function(done){
-            expect(oldContent).not.toMatch(newContent);
+            expect(oldContent).not.toEqual(newContent);
             done();
         });
     });
